@@ -11,17 +11,19 @@ public class BaseEnemeyClass {
     public Text enemeyHP;
     public bool enemyTurn;
     public bool enemeyDefend;
-
+    public bool inHittingRange;
 
     public float baseMP;
     public float curMP;
 
     public int stamnia;
+    public Text enemeySta;
 
 
     public void SetText()
     {
         enemeyHP.text = curHP.ToString();
+        enemeySta.text = stamnia.ToString();
     }
 
     public float getCurHP()

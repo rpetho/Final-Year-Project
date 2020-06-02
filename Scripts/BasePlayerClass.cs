@@ -7,21 +7,22 @@ using UnityEngine.UI;
 public class BasePlayerClass
 {
 
-    public float baseHP;
-    public float curHP;
-    public Text PlayerHP;
-    public Text PlayerStamina;
+    public float baseHP;    // Player Base Health
+    public float curHP;     // Player Current Health
+    public Text PlayerHP;   // Text Output of player Health
+    public Text PlayerStamina;  // Text Output of Player Stamina
 
-    public bool playerTurn;
-    public bool playerDefend;
+    public bool playerTurn;     // Boolean for if its players turn
+    public bool playerDefend;   // Boolean for if the player is defending
+    public bool inRange;        // Boolean for if the player is in range to attack
 
-    public float baseMP;
-    public float curMP;
+    public float baseMP;    // Base Magic power
+    public float curMP;     // Current Magic power
 
-    public int stamnia;
+    public int stamnia;     // Player Stamina
 
 
-    public void SetText()
+    public void SetText()   // Set Text Func
     {
         PlayerHP.text = curHP.ToString();
         PlayerStamina.text = stamnia.ToString();

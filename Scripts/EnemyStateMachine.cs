@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using MLAgents;
 
 
 public class EnemyStateMachine : MonoBehaviour
@@ -8,12 +9,15 @@ public class EnemyStateMachine : MonoBehaviour
     public Text enemeyHP;
     public PlayerStateMachine tempPlayer;
     public GameMaster tempGameMaster;
+    Agent enemyAgent;
 
     // Use this for initialization
     void Start()
     {
         tempPlayer = GameObject.Find("Player").GetComponent<PlayerStateMachine>();
-        tempGameMaster = GameObject.Find("Plane").GetComponent<GameMaster>();
+        tempGameMaster = GameObject.Find("GameMaster").GetComponent<GameMaster>();
+        enemyAgent = GameObject.Find("Enemy").GetComponent<EnemeyAgent>();
+
     }
 
 
@@ -30,6 +34,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     }
 
+
     public void EnemeyStateFunc()
     {
         switch (EnemeyCurState)
@@ -38,11 +43,13 @@ public class EnemyStateMachine : MonoBehaviour
                 {
                     Debug.Log("Enemy Wait");
 
+                    enemy.stamnia = 3;
+
                     if (tempPlayer.player.playerTurn == false)
                     {
                         EnemeyCurState = EnemyState.Turn;
+                        enemy.enemyTurn = true;
                     }
-
                     if (enemy.curHP <= 0)
                     {
                         EnemeyCurState = EnemyState.Dead;
@@ -54,13 +61,20 @@ public class EnemyStateMachine : MonoBehaviour
             case EnemyState.Turn:
                 {
                     enemy.enemeyDefend = false;
-                    enemy.enemyTurn = true;
                     Debug.Log("Enemy Turn");
+
 
                     if (enemy.curHP <= 0)
                     {
                         EnemeyCurState = EnemyState.Dead;
                     }
+
+                    if (enemy.stamnia <= 0)
+                    {
+                        enemy.enemyTurn = false;
+                        tempPlayer.player.playerTurn = true;
+                    }
+
 
                     if (enemy.enemyTurn == false)
                     {
@@ -68,11 +82,13 @@ public class EnemyStateMachine : MonoBehaviour
                         tempPlayer.player.playerTurn = true;
                         tempGameMaster.roundNumber++;
                     }
+
                     break;
                 }
             case EnemyState.Dead:
                 {
                     Debug.Log("Enemy Dead");
+                    EnemeyCurState = EnemyState.Wait;
                     break;
                 }
         }
@@ -86,7 +102,7 @@ public class EnemyStateMachine : MonoBehaviour
     public void BasicAttack()
     {
         tempPlayer.player.curHP--;
-        enemy.enemyTurn = false;
+        enemy.stamnia--;
     }
 
     public void EnemyDefend()
@@ -96,8 +112,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     public void HeavyAttack()
     {
-        tempPlayer.player.curHP--;
-        tempPlayer.player.curHP--;
-        enemy.enemyTurn = false;
+        tempPlayer.player.curHP = tempPlayer.player.curHP - 2;
+        enemy.stamnia--;
     }
 }
